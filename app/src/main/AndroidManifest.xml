@@ -12,6 +12,20 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.JetpackCompose"
         tools:targetApi="31" >
+
+        <activity
+            android:name=".auth.MainScreen"
+            android:exported="true"
+            android:theme="@style/Theme.JetpackCompose" >
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+
         <activity
             android:name=".Home"
             android:exported="false"
@@ -20,18 +34,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.JetpackCompose" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
+            android:theme="@style/Theme.JetpackCompose"/>
     </application>
 
 </manifest>
