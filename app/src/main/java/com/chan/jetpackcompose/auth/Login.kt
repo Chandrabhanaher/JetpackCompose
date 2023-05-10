@@ -1,5 +1,6 @@
 package com.chan.jetpackcompose.auth
 
+import android.content.Intent
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -9,26 +10,19 @@ import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
+import androidx.compose.ui.*
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.platform.*
+import androidx.compose.ui.text.*
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.input.*
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Popup
-import androidx.compose.ui.window.PopupProperties
+import androidx.compose.ui.unit.*
+import androidx.compose.ui.window.*
 import androidx.navigation.NavHostController
+import com.chan.jetpackcompose.Home
 import com.chan.jetpackcompose.auth.routes.AuthRoutes
 import com.chan.jetpackcompose.ui.theme.Purple200
 import com.chan.jetpackcompose.ui.theme.Purple700
@@ -172,6 +166,7 @@ fun LoginScreen(navController: NavHostController) {
                     Text(text = "You went to login this app", style = TextStyle(fontSize = 25.sp, fontFamily = FontFamily.Cursive))
 
                     Spacer(modifier = Modifier.height(10.dp))
+
                     Row(
                         modifier = Modifier
                             .absolutePadding(20.dp, 16.dp, 20.dp, 0.dp)
@@ -182,7 +177,9 @@ fun LoginScreen(navController: NavHostController) {
                             Text(text = "Close")
                         }
                         Button(onClick = {
-                            popupControl = false }) {
+                            popupControl = false
+                            context.startActivity(Intent(context, Home::class.java).putExtra("username", username))
+                        }) {
                             Text(text = "Login")
                         }
                     }

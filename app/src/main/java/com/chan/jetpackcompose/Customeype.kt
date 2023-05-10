@@ -37,3 +37,35 @@ val Typography.title: TextStyle
             fontFamily = FontFamily.Monospace
         )
     }
+
+val Typography.username: TextStyle
+    @Composable
+    get() {
+        return TextStyle(
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Medium,
+            fontFamily = FontFamily.Monospace,
+            color = Color.White
+        )
+    }
+val Typography.email: TextStyle
+    @Composable
+    get() {
+        return TextStyle(
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Medium,
+            fontFamily = FontFamily.Monospace,
+            color = Color.White
+        )
+    }
+
+val Typography.drawerItemText: TextStyle
+    @Composable
+    get() {
+        return TextStyle(
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Medium,
+            fontFamily = FontFamily.Monospace,
+            color = Color.White
+        )
+    }
