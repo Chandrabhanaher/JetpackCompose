@@ -179,6 +179,7 @@ fun ShowNavigationContent() {
                 Icon(imageVector = Icons.Default.Add, contentDescription = "Fan Icon")
             }
         },
+//        Drawer Menu
         drawerElevation = 5.dp,
         drawerBackgroundColor = Color.Cyan,
         drawerContentColor = Color.Black,
@@ -398,14 +399,17 @@ fun HomeScreen(navController: NavHostController) {
 @Composable
 fun DrawerContest(
     gradientColors: List<Color> = listOf(Color(0xFFF70A74), Color(0xFFF59118)),
-    itemClick: (String) -> Unit
-) {
+    itemClick: (String) -> Unit) {
 
     val menuItemList = navigationDrawerItems()
+
     val activity = LocalContext.current.findActivity()
+    //val username = activity?.intent!!.getStringExtra("username")
 
-    val username = activity?.intent!!.getStringExtra("username")
+    val sp = activity!!.sharePreference()
+    val username = sp.getString("username", "")
 
+//    Home Activity Drawer Top Bar
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -512,13 +516,6 @@ fun navigationDrawerItems(): List<NavigationDrawerItem> {
     )
     return itemList
 }
-
-fun Context.findActivity(): Activity? = when (this) {
-    is Activity -> this
-    is ContextWrapper -> baseContext.findActivity()
-    else -> null
-}
-
 
 @Preview(showBackground = true)
 @Composable

@@ -24,6 +24,7 @@ import androidx.compose.ui.window.*
 import androidx.navigation.NavHostController
 import com.chan.jetpackcompose.Home
 import com.chan.jetpackcompose.auth.routes.AuthRoutes
+import com.chan.jetpackcompose.sharePreference
 import com.chan.jetpackcompose.ui.theme.Purple200
 import com.chan.jetpackcompose.ui.theme.Purple700
 
@@ -105,6 +106,8 @@ fun LoginScreen(navController: NavHostController) {
             Button(
                 onClick = {
                     if (username.isNotBlank()) {
+                        val sp = context.sharePreference()
+                        sp.edit().putString("username", username).apply()
                         popupControl = true
                     } else {
                         Toast.makeText(
@@ -114,7 +117,7 @@ fun LoginScreen(navController: NavHostController) {
                         ).show()
                     }
                 },
-                shape = RoundedCornerShape(50.dp),
+                shape = RoundedCornerShape(20.dp),
                 modifier = Modifier
                     .width(100.dp)
                     .height(50.dp)
