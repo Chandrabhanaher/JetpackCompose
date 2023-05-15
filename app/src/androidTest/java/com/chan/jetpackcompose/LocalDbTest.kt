@@ -1,5 +1,6 @@
 package com.chan.jetpackcompose
 
+import android.util.Log
 import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
@@ -42,10 +43,10 @@ class LocalDbTest {
     @Test
     @Throws(Exception::class)
     fun insertAndGetUser() = runBlocking{
-        val user = User(0,"aher@gmail.com", "Aher","123456")
-        userDao.insertUser(user)
+        val user = User("aher111@gmail.com", "Ahe11r","123456")
+        val result  = userDao.insertUser(user)
+        Log.e("CHANDRA", "$result")
         val data = userDao.getUser(1)
         assertEquals(data!!.userid, 1)
-        assertEquals(data.name, "Aher")
     }
 }

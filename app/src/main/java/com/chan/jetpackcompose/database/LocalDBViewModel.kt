@@ -1,12 +1,11 @@
 package com.chan.jetpackcompose.database
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 /**
@@ -14,19 +13,30 @@ import kotlinx.coroutines.launch
  * chandrabhan99@gmail.com
  */
 
-class LocalDBViewModel(application: Application):ViewModel() {
+class LocalDBViewModel(application: Application) : AndroidViewModel(application) {
     private val repository: UserRepository
-    var user: LiveData<List<User>>? = null
+
+    var userList: LiveData<List<User>>?= null
+    var singleUser: LiveData<User>? = null
 
     init {
         val db = DatabaseBuilder.getInstance(application).userDao()
         repository = UserRepository(db)
-        user = repository.userData
+        userList = repository.userData
+        singleUser = repository.singleUser
     }
 
-    fun addUser(user: User){
-        viewModelScope.launch {
+     fun getAllUsers() {
+        repository.getAllUsers()
+    }
+
+    suspend fun addUser(user: User): Long =
+        withContext(viewModelScope.coroutineContext) {
             repository.addNewUser(user)
         }
+
+    fun userLogin(email: String, password: String) {
+        repository.userLogin(email, password)
     }
+
 }

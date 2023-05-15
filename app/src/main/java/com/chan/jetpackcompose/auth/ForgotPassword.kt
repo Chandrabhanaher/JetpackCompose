@@ -19,6 +19,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.chan.jetpackcompose.component.CustomTopAppBar
+import com.chan.jetpackcompose.database.LocalDBViewModel
 
 
 /**
@@ -28,15 +29,15 @@ import com.chan.jetpackcompose.component.CustomTopAppBar
 
 
 @Composable
-fun ForgotPasswordScreen(navController: NavHostController) {
+fun ForgotPasswordScreen(navController: NavHostController, viewModel: LocalDBViewModel) {
     Box(modifier = Modifier.fillMaxSize()) {
-        ForgotScreen(navController)
+        ForgotScreen(navController,viewModel)
     }
 }
 
 
 @Composable
-fun ForgotScreen(navController: NavHostController) {
+fun ForgotScreen(navController: NavHostController, viewModel: LocalDBViewModel) {
 
     val context = LocalContext.current
 

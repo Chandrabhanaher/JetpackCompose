@@ -30,5 +30,7 @@ object DatabaseBuilder {
     }
 
     private fun buildLocalDB(context: Context) =
-        Room.databaseBuilder(context.applicationContext, AppDatabase::class.java, "APP_DB").build()
+        Room.databaseBuilder(context.applicationContext, AppDatabase::class.java, "APP_DB")
+            .allowMainThreadQueries()
+            .build()
 }

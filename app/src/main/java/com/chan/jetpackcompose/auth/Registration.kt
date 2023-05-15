@@ -1,9 +1,6 @@
 package com.chan.jetpackcompose.auth
 
 import android.app.Application
-import android.content.Intent
-import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -31,17 +28,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.chan.jetpackcompose.component.CustomTopAppBar
-import com.chan.jetpackcompose.database.LocalDBFactory
 import com.chan.jetpackcompose.database.LocalDBViewModel
 import com.chan.jetpackcompose.database.User
 import com.chan.jetpackcompose.ui.theme.Purple200
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 
 /**
@@ -50,16 +44,15 @@ import com.chan.jetpackcompose.ui.theme.Purple200
  */
 
 @Composable
-fun RegisterScreen(navController: NavHostController) {
+fun RegisterScreen(navController: NavHostController, viewModel: LocalDBViewModel) {
     Box(modifier = Modifier.fillMaxSize()) {
-        RegisterUser(navController)
+        RegisterUser(navController, viewModel)
     }
 }
 
+@OptIn(DelicateCoroutinesApi::class)
 @Composable
-fun RegisterUser(navController: NavHostController) {
-    val context = LocalContext.current
-
+fun RegisterUser(navController: NavHostController, viewModel: LocalDBViewModel) {
 
     var passwordVisible by remember { mutableStateOf(false) }
 
@@ -72,11 +65,6 @@ fun RegisterUser(navController: NavHostController) {
 
     val application = LocalContext.current.applicationContext as Application
     val lifecycleOwner = rememberUpdatedState(newValue = LocalLifecycleOwner.current)
-
-    val owner = LocalViewModelStoreOwner.current
-    owner?.let {
-        val viewModel: LocalDBViewModel = viewModel(it, "LocalDBViewModel", LocalDBFactory(application))
-    }
 
     Scaffold(
         topBar = {
@@ -125,7 +113,7 @@ fun RegisterUser(navController: NavHostController) {
                     singleLine = true,
                     onValueChange = { name = it },
                     label = { Text(text = "Name") },
-                    trailingIcon ={
+                    trailingIcon = {
                         Icon(
                             imageVector = Icons.Default.Person,
                             contentDescription = "Person Icon"
@@ -169,15 +157,18 @@ fun RegisterUser(navController: NavHostController) {
                             } else if (password.isBlank()) {
                                 message = "Please enter password"
                                 popupControl = true
-                            }else{
-
-                                val user = User(0, email, name, password)
-                                //viewModel.addUser(user)
-
-                              /*  viewModel.user!!.observe(navController.previousBackStackEntry!!, Observer {
-                                    Log.e("User", "User dtails - $it")
-                                })*/
-                               // popupControl = true
+                            } else {
+                                val user = User(email, name, password)
+//                                message = "$user"
+                                GlobalScope.launch {
+                                    val result = viewModel.addUser(user)
+                                    message = if(result > 0){
+                                        "Register successfully !"
+                                    }else{
+                                        "Something missing...!"
+                                    }
+                                }
+                                popupControl = true
                             }
                         },
                         shape = RoundedCornerShape(20.dp),
@@ -210,7 +201,8 @@ fun RegisterUser(navController: NavHostController) {
                     .fillMaxWidth()
                     .height(250.dp)
                     .padding(16.dp)
-                    .background(Color.Cyan)) {
+                    .background(Color.Cyan)
+            ) {
 
                 Column(
                     modifier = Modifier

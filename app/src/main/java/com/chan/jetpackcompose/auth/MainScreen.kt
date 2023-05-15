@@ -1,15 +1,21 @@
 package com.chan.jetpackcompose.auth
 
+import android.app.Application
 import android.os.Bundle
-import android.os.PersistableBundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.chan.jetpackcompose.auth.routes.AuthRoutes
+import com.chan.jetpackcompose.database.LocalDBFactory
+import com.chan.jetpackcompose.database.LocalDBViewModel
 
 
 /**
@@ -20,23 +26,32 @@ class MainScreen: ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent{
-            NavContent()
+            val owner = LocalViewModelStoreOwner.current
+            val application = LocalContext.current.applicationContext as Application
+            val navController: NavHostController = rememberNavController()
+            owner?.let {
+                val viewModel: LocalDBViewModel = viewModel(it, "LocalDBViewModel", LocalDBFactory(application))
+
+                NavContent(navController, viewModel)
+
+            }
         }
     }
 }
 
 @Composable
-fun NavContent(){
-    val navController = rememberNavController()
+fun NavContent(navController:NavHostController, viewModel: LocalDBViewModel) {
+
+
     NavHost(navController = navController, startDestination = AuthRoutes.Login.routs){
         composable(AuthRoutes.Login.routs){
-            LoginScreen(navController = navController)
+            LoginScreen(navController,viewModel)
         }
         composable(AuthRoutes.Register.routs){
-            RegisterScreen(navController = navController)
+            RegisterScreen(navController,viewModel)
         }
         composable(AuthRoutes.ForgotPassword.routs){
-            ForgotPasswordScreen(navController = navController)
+            ForgotPasswordScreen(navController,viewModel)
         }
     }
 
@@ -45,5 +60,14 @@ fun NavContent(){
 @Preview
 @Composable
 fun DefaultPreview(){
-    NavContent()
+    val owner = LocalViewModelStoreOwner.current
+    val application = LocalContext.current.applicationContext as Application
+    val navController: NavHostController = rememberNavController()
+
+    owner?.let {
+        val viewModel: LocalDBViewModel = viewModel(it, "LocalDBViewModel", LocalDBFactory(application))
+
+        NavContent(navController,viewModel)
+
+    }
 }
